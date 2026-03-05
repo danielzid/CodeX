@@ -46,7 +46,7 @@ static void write_int(char *buf, int *pos, int n) {
 }
 
 // breaks n into prime factors and writes the exponents as a string
-// zeros get compressed into "_N.", ends with $
+// zeros get compressed into _N. to keep things short, ends with $
 void primeFactorizationPowers(int n, char *output, int *outpos) {
     int powers[PRIMECNT] = {0};
 
@@ -82,7 +82,7 @@ void primeFactorizationPowers(int n, char *output, int *outpos) {
 }
 
 // converts each character to its factorization string, then shifts
-// every byte by a sequencial pi digit to scramble it, prefixes result with !!
+// every byte by a pi digit to scramble it, prefixes result with !!
 void encrypt(const char *input, char *output) {
     char factored[INSIZE];
     int  fpos = 0;
@@ -93,7 +93,7 @@ void encrypt(const char *input, char *output) {
     }
     factored[fpos] = '\0';
 
-    // encryoted flag
+    // mark as encrypted
     output[0] = '!'; 
     output[1] = '!';
 
