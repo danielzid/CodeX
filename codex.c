@@ -46,7 +46,7 @@ static void write_int(char *buf, int *pos, int n) {
 }
 
 // breaks n into prime factors and writes the exponents as a string
-// zeros get compressed into _N. to keep things short, ends with $
+// zeros get compressed into "_N." ends with $
 void primeFactorizationPowers(int n, char *output, int *outpos) {
     int powers[PRIMECNT] = {0};
 
