@@ -46,7 +46,7 @@ static void write_int(char *buf, int *pos, int n) {
 }
 
 // breaks n into prime factors and writes the exponents as a string
-// zeros get compressed into "_N." ends with $
+// zeros get compressed into _N. ends with $
 void primeFactorizationPowers(int n, char *output, int *outpos) {
     int powers[PRIMECNT] = {0};
 
@@ -89,17 +89,18 @@ void encrypt(const char *input, char *output) {
 
     for (int i = 0; input[i] != '\0'; i++) {
         int c = (unsigned char)input[i];
-        if (c > 1) primeFactorizationPowers(c, factored, &fpos);
+        if (c >= 1) primeFactorizationPowers(c, factored, &fpos);
     }
     factored[fpos] = '\0';
 
-    // mark as encrypted
-    output[0] = '!'; 
+    output[0] = '!'; // mark as encrypted
     output[1] = '!';
 
     int limit = (fpos + 2 < INSIZE - 1) ? fpos : INSIZE - 3;
     for (int i = 0; i < limit; i++) {
-        output[i + 2] = (char)((int)factored[i] + pi_digits[i % PIOFF]);
+        // shift by pi then keep in printable range
+        int shifted = ((int)factored[i] - 32 + pi_digits[i % PIOFF]) % 95 + 32;
+        output[i + 2] = (char)shifted;
     }
     output[limit + 2] = '\0';
 }
@@ -110,7 +111,8 @@ void decrypt(const char *input, char *output) {
     int  len = 0;
 
     while (input[len] != '\0' && len < INSIZE - 1) {
-        shifted[len] = (char)((int)input[len] - pi_digits[len % PIOFF]);
+        int unshifted = ((int)input[len] - 32 - pi_digits[len % PIOFF] + 950) % 95 + 32;
+        shifted[len] = (char)unshifted;
         len++;
     }
     shifted[len] = '\0';
